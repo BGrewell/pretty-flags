@@ -128,6 +128,11 @@ func (f *flagHandler) Usage(output io.Writer) (usage func()) {
 func (f *flagHandler) Parse() {
 	flag.Usage = f.Usage(os.Stdout)
 	flag.Parse()
+
+	if f.isFlagPassed("help") {
+		flag.Usage()
+		os.Exit(0)
+	}
 }
 
 func (f *flagHandler) AddFlagBool(name string, section interface{}, defaultValue bool, usage string, altNames *[]string) *bool {
@@ -190,7 +195,7 @@ func (f *flagHandler) AddFlagInt64(name string, section interface{}, defaultValu
 	return &v
 }
 
-func (f *flagHandler) AddFlagUnint(name string, section interface{}, defaultValue uint, usage string, altNames *[]string) *uint {
+func (f *flagHandler) AddFlagUint(name string, section interface{}, defaultValue uint, usage string, altNames *[]string) *uint {
 	var v uint
 
 	flag.UintVar(&v, name, defaultValue, usage)
@@ -260,4 +265,14 @@ func (f *flagHandler) addToFlagMap(name string, section interface{}, defaultValu
 		}
 		f.flagMap[section] = append(f.flagMap[section], &clf)
 	}
+}
+
+func (f *flagHandler) isFlagPassed(name string) bool {
+	found := false
+	flag.Visit(func(f *flag.Flag) {
+		if f.Name == name {
+			found = true
+		}
+	})
+	return found
 }
