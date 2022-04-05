@@ -46,17 +46,18 @@ var (
 
 // NewFlagHandler creates a new flag handler for the given flag set.
 func NewFlagHandler(app string, version, branch, commit, tag *string) *flagHandler {
+	na := "N/A"
 	if version == nil {
-		*version = "N/A"
+		version = &na
 	}
 	if branch == nil {
-		*branch = "N/A"
+		branch = &na
 	}
 	if commit == nil {
-		*commit = "N/A"
+		commit = &na
 	}
 	if tag == nil {
-		*tag = "N/A"
+		tag = &na
 	}
 	return &flagHandler{
 		flagKeys: make([]string, 0),
