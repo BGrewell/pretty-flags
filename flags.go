@@ -59,15 +59,17 @@ func NewFlagHandler(app string, version, branch, commit, tag *string) *flagHandl
 	if tag == nil {
 		tag = &na
 	}
-	return &flagHandler{
+	fh := &flagHandler{
 		flagKeys: make([]string, 0),
 		flagMap:  make(map[string][]*CommandLineFlag),
 		app:      app,
-		version:  version,
-		branch:   branch,
-		commit:   commit,
-		tag:      tag,
+		version:  *version,
+		branch:   *branch,
+		commit:   *commit,
+		tag:      *tag,
 	}
+	fh.AddFlagBool("help", SECTION_GENERAL, false, "Show this help message.", nil)
+	return fh
 }
 
 // flagHandler is a struct that holds the flag map and flag keys.
@@ -75,10 +77,10 @@ type flagHandler struct {
 	flagMap  map[string][]*CommandLineFlag
 	flagKeys []string
 	app      string
-	version  *string
-	branch   *string
-	commit   *string
-	tag      *string
+	version  string
+	branch   string
+	commit   string
+	tag      string
 }
 
 // PrintAppHeader prints the application header
