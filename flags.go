@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/fatih/color"
 	"io"
+	"os"
 )
 
 type CommandLineFlag struct {
@@ -121,6 +122,11 @@ func (f *flagHandler) Usage(output io.Writer) (usage func()) {
 		}
 		fmt.Println("")
 	}
+}
+
+func (f *flagHandler) Parse() {
+	flag.Usage = f.Usage(os.Stdout)
+	flag.Parse()
 }
 
 func (f *flagHandler) AddFlagBool(name string, section interface{}, defaultValue bool, usage string, altNames *[]string) *bool {
